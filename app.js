@@ -1,6 +1,7 @@
 const store='dayflow-v2';
 const base={tasks:[],events:[],notes:[],sessions:[]};
-let data=Object.assign(base,JSON.parse(localStorage.getItem(store)||'{}'));
+const initial=localStorage.getItem(store)||localStorage.getItem('dayflow-data')||'{}';
+let data=Object.assign(base,JSON.parse(initial));
 data.tasks=(data.tasks||[]).map(t=>({...t,id:t.id||Date.now()+Math.random(),priority:t.priority||'medium',due:t.due||'',note:t.note||'',done:!!t.done,created:t.created||new Date().toISOString()}));
 let page='home',month=new Date(),filter='all',query='',timer=1500,interval=null;
 const $=s=>document.querySelector(s), esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])), save=()=>localStorage.setItem(store,JSON.stringify(data));
