@@ -1,38 +1,17 @@
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#17171c" />
-    <title>Dayflow — Personal Dashboard</title>
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <header class="topbar">
-      <a class="brand" href="#home" aria-label="Dayflow home">dayflow<span>.</span></a>
-      <nav aria-label="メインナビゲーション">
-        <button class="nav-link active" data-page="home">ホーム</button>
-        <button class="nav-link" data-page="tasks">タスク</button>
-        <button class="nav-link" data-page="calendar">カレンダー</button>
-        <button class="nav-link" data-page="notes">メモ</button>
-        <button class="nav-link" data-page="focus">集中</button>
-      </nav>
-      <button id="notificationButton" class="icon-button" title="通知を有効化" aria-label="通知を有効化">♧</button>
-    </header>
-    <main id="app" tabindex="-1"></main>
-    <template id="home-template">
-      <section class="hero">
-        <div><p class="eyebrow">YOUR DAY, INTENTIONALLY</p><h1>今日を、<em>整える。</em></h1><p class="lead">やること、予定、ひらめき、集中時間をひとつの静かな場所に。</p></div>
-        <div class="date-card"><span id="todayDate"></span><strong id="todayDay"></strong><span id="taskProgress"></span></div>
-      </section>
-      <section class="tool-grid" aria-label="ツールを選ぶ">
-        <button class="tool-card task-card" data-page="tasks"><span class="tool-icon">✓</span><span><small>01</small><strong>タスク</strong><i>今日の優先事項を整理する</i></span><b>→</b></button>
-        <button class="tool-card calendar-card" data-page="calendar"><span class="tool-icon">◫</span><span><small>02</small><strong>カレンダー</strong><i>予定と時間を見渡す</i></span><b>→</b></button>
-        <button class="tool-card note-card" data-page="notes"><span class="tool-icon">✦</span><span><small>03</small><strong>クイックメモ</strong><i>浮かんだことを残す</i></span><b>→</b></button>
-        <button class="tool-card focus-card" data-page="focus"><span class="tool-icon">◷</span><span><small>04</small><strong>ポモドーロ</strong><i>深く、ひとつに集中する</i></span><b>→</b></button>
-      </section>
-      <section class="home-bottom"><div><p class="eyebrow">NEXT UP</p><div id="nextTask" class="next-task"></div></div><button class="primary" data-page="tasks">タスクを追加 <span>+</span></button></section>
-    </template>
-    <script src="./app.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0c0e" />
+  <meta name="description" content="DAYFLOW — 個人のためのデイリーダッシュボード" />
+  <title>DAYFLOW</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div id="app"></div>
+  <div id="modal-root"></div>
+  <script src="./app.js"></script>
+</body>
 </html>
