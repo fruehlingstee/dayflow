@@ -243,7 +243,7 @@
   }
 
   bind = function () {
-    oldBind();
+    if (page !== 'tasks' && page !== 'calendar') oldBind();
     if (page === 'tasks') {
       document.querySelector('#taskForm').onsubmit = event => {
         event.preventDefault();
@@ -260,6 +260,10 @@
       document.querySelector('#enableNotifications').onclick = enableNotifications;
       document.querySelector('#exportData').onclick = exportData;
       document.querySelector('#importData').onchange = event => event.target.files[0] && importData(event.target.files[0]);
+      document.querySelector('#search').oninput = event => { query = event.target.value; drawTasks(); };
+      document.querySelector('#sort').onchange = drawTasks;
+      document.querySelectorAll('[data-filter]').forEach(button => button.onclick = () => { filter = button.dataset.filter; render(); });
+      drawTasks();
     }
     if (page === 'calendar') {
       document.querySelector('#prevMonth').onclick = () => { month.setMonth(month.getMonth() - 1); render(); };
