@@ -1,6 +1,6 @@
 (function () {
   const oldBind = bind;
-  const todayKey = () => dateKey(new Date());
+  const todayKey = () => dayKey(new Date());
   const repeatLabel = { none: '', daily: '毎日', weekly: '毎週', monthly: '毎月' };
 
   data.tasks = data.tasks.map(task => ({
@@ -17,7 +17,7 @@
     if (task.repeat === 'daily') base.setDate(base.getDate() + 1);
     if (task.repeat === 'weekly') base.setDate(base.getDate() + 7);
     if (task.repeat === 'monthly') base.setMonth(base.getMonth() + 1);
-    return dateKey(base);
+    return dayKey(base);
   }
 
   function spawnRepeat(task) {
@@ -65,7 +65,7 @@
         <button class="button">追加</button>
       </form>
       <div class="toolbar">
-        <input class="input" id="search" value="${escapeHtml(query)}" placeholder="タスク・メモを検索">
+        <input class="input" id="search" value="${esc(query)}" placeholder="タスク・メモを検索">
         <select class="select" id="sort"><option value="created">追加順</option><option value="due">期限順</option><option value="priority">優先度順</option><option value="name">名前順</option></select>
       </div>
       <div class="filters">
@@ -106,7 +106,7 @@
       ].filter(Boolean).join('');
       return `<article class="task ${task.done ? 'done' : ''}">
         <input class="check" type="checkbox" data-toggle="${task.id}" ${task.done ? 'checked' : ''} aria-label="完了">
-        <div><div class="task-title">${escapeHtml(task.title)}</div><div class="meta">${meta}</div></div>
+        <div><div class="task-title">${esc(task.title)}</div><div class="meta">${meta}</div></div>
         <div class="task-actions"><button data-edit="${task.id}">編集</button></div>
       </article>`;
     }).join('') : '<div class="empty">条件に一致するタスクはありません</div>';
@@ -125,19 +125,19 @@
     const task = data.tasks.find(item => item.id == id);
     const subtasks = task.subtasks.map(sub => `<div class="subtask-row">
       <input type="checkbox" data-sub-toggle="${sub.id}" ${sub.done ? 'checked' : ''}>
-      <span class="${sub.done ? 'struck' : ''}">${escapeHtml(sub.title)}</span>
+      <span class="${sub.done ? 'struck' : ''}">${esc(sub.title)}</span>
       <button class="ghost" data-sub-remove="${sub.id}">×</button>
     </div>`).join('') || '<div class="subtask-empty">サブタスクはありません</div>';
 
     modal(`<h2>タスクを編集</h2>
-      <label>タスク名</label><input class="input" id="editTitle" maxlength="120" value="${escapeHtml(task.title)}">
+      <label>タスク名</label><input class="input" id="editTitle" maxlength="120" value="${esc(task.title)}">
       <div class="modal-grid">
         <div><label>優先度</label><select class="select" id="editPriority"><option value="high">高</option><option value="medium">中</option><option value="low">低</option></select></div>
         <div><label>期限</label><input class="input" id="editDue" type="date" value="${task.due || ''}"></div>
         <div><label>繰り返し</label><select class="select" id="editRepeat"><option value="none">なし</option><option value="daily">毎日</option><option value="weekly">毎週</option><option value="monthly">毎月</option></select></div>
         <div><label>通知日時</label><input class="input" id="editReminder" type="datetime-local" value="${task.reminderAt || ''}"></div>
       </div>
-      <label>メモ</label><textarea id="editNote" rows="3">${escapeHtml(task.note || '')}</textarea>
+      <label>メモ</label><textarea id="editNote" rows="3">${esc(task.note || '')}</textarea>
       <label>サブタスク</label><div class="subtasks">${subtasks}</div>
       <div class="toolbar bottomless"><input class="input" id="newSubtask" placeholder="サブタスク"><button class="button dim" id="addSubtask">追加</button></div>
       <div class="modal-actions"><button class="button dim" id="cancelEdit">キャンセル</button><button class="button" id="saveEdit">保存</button></div>
@@ -185,15 +185,15 @@
     for (let index = 0; index < start; index++) cells.push('<div class="day"></div>');
     for (let day = 1; day <= days; day++) {
       const key = `${year}-${String(currentMonth + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-      const events = data.events.filter(event => event.date === key).map(event => `<div class="event">${escapeHtml(event.time || '終日')} ${escapeHtml(event.title)}</div>`);
-      const dueTasks = data.tasks.filter(task => !task.done && task.due === key).map(task => `<div class="event task-event">期限 ${escapeHtml(task.title)}</div>`);
+      const events = data.events.filter(event => event.date === key).map(event => `<div class="event">${esc(event.time || '終日')} ${esc(event.title)}</div>`);
+      const dueTasks = data.tasks.filter(task => !task.done && task.due === key).map(task => `<div class="event task-event">期限 ${esc(task.title)}</div>`);
       cells.push(`<div class="day ${key === todayKey() ? 'today' : ''}"><b>${day}</b>${events.concat(dueTasks).join('')}</div>`);
     }
-    document.querySelector('#app').innerHTML = layout(`<div class="page">
+    return `<main class="page">
       <div class="page-head"><h1 class="title">${year}年 ${currentMonth + 1}月</h1><div><button class="ghost" id="prevMonth">←</button><button class="ghost" id="todayMonth">今日</button><button class="ghost" id="nextMonth">→</button></div></div>
       <form class="toolbar" id="eventForm"><input class="select" id="eventDate" type="date" value="${todayKey()}" required><input class="select" id="eventTime" type="time"><input class="input" id="eventTitle" required placeholder="予定"><button class="button">追加</button></form>
       <section class="panel calendar-panel"><div class="calendar">${cells.join('')}</div></section>
-    </div>`);
+    </main>`;
   };
 
   function exportData() {
