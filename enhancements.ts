@@ -214,7 +214,7 @@
         modal(`<h2>バックアップを復元</h2><p>現在のデータを選択したバックアップで置き換えます。</p><div class="modal-actions"><button class="button dim" id="cancelImport">キャンセル</button><button class="button" id="confirmImport">復元する</button></div>`);
         document.querySelector('#cancelImport').onclick = closeModal;
         document.querySelector('#confirmImport').onclick = () => {
-          data = { tasks: incoming.tasks.map(task => ({ ...task, repeat: task.repeat || 'none', subtasks: task.subtasks || [], reminderAt: task.reminderAt || '', notified: false })), events: incoming.events, notes: incoming.notes, sessions: incoming.sessions || [] };
+          data = { tasks: incoming.tasks.map(task => ({ ...task, repeat: task.repeat || 'none', subtasks: task.subtasks || [], reminderAt: task.reminderAt || '', notified: false })), events: incoming.events, notes: incoming.notes, sessions: incoming.sessions || [], bookmarks: Array.isArray(incoming.bookmarks) ? incoming.bookmarks : [], calculatorHistory: Array.isArray(incoming.calculatorHistory) ? incoming.calculatorHistory : [] };
           save(); closeModal(); render();
         };
       } catch {
